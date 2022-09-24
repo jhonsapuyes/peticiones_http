@@ -20,10 +20,10 @@ form.addEventListener("submit", function(e){
         post(ruta,id,name,email,age)
     }
     if(accion == "put"){
-        actualiza_datos(ruta,id,name,email,age)
+        put(ruta,id,name,email,age)
     }
     if(accion == "delete"){
-        borrar_datos(ruta,id)
+        dell(ruta,id)
     }
     else{
 
@@ -48,15 +48,15 @@ function get(pt_1) {
     }
 }
 
-function post(ruta,pt_1,pt_2,pt_3,pt_4) {   
+function post(ruta,pt_1,pt_2,pt_3,pt_4){   
     const url_get= ruta
     peticion_get(url_get, retorno_http)
-    function peticion_get(url, cFunction) {
+    function peticion_get(url, cFunction){
         const api= new XMLHttpRequest();
         api.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
                let datos_api = JSON.parse(this.responseText);
-                for (let index = 0; index < 1; index++) {
+                for(let index = 0; index < 1; index++){
                    let element = datos_api.items[index];
                    cFunction(element);
                 }
@@ -65,16 +65,16 @@ function post(ruta,pt_1,pt_2,pt_3,pt_4) {
         api.open("GET",url_get);
         api.send();
     }
-    function retorno_http(xhttp) {
+    function retorno_http(xhttp){
         let at= xhttp
         let casillas_post=[]
-        Object.entries(at).map(function(casilla) {
+        Object.entries(at).map(function(casilla){
             //console.log(casilla[0]); 
             casillas_post.push(casilla[0])
         })
         let postear = new Object()
         let datos_post=[pt_1,pt_2,pt_3,pt_4]
-        for (let i = 0; i < casillas_post.length; i++) {
+        for(let i = 0; i < casillas_post.length; i++){
             const element = casillas_post[i];
             text="postear."+element+"='"+ datos_post[i]+"'";
             eval(text)
@@ -86,13 +86,121 @@ function post(ruta,pt_1,pt_2,pt_3,pt_4) {
         xhr.open('POST', url,true)
         xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
         xhr.send(data);
-        xhr.onload = function () {
-            if(xhr.status === 201) {
+        xhr.onload = function (){
+            if(xhr.status === 201){
                 get(ruta)        
             }
         }
     }
 }
+
+function put(ruta,pt_1,pt_2,pt_3,pt_4){
+    const url_get= ruta
+    peticion_get(url_get, retorno_http)
+    function peticion_get(url, cFunction){
+        const api= new XMLHttpRequest();
+        api.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200){
+               let datos_api = JSON.parse(this.responseText);
+                for(let index = 0; index < 1; index++){
+                   let element = datos_api.items[index];
+                   cFunction(element);
+                }
+            }
+        }
+        api.open("GET",url_get);
+        api.send();
+    }
+    function retorno_http(xhttp){
+        let at= xhttp
+        let casillas_post=[]
+        Object.entries(at).map(function(casilla){
+            //console.log(casilla[0]); 
+            casillas_post.push(casilla[0])
+        })
+        let actulizar = new Object()
+        let datos_put=[pt_1,pt_2,pt_3,pt_4]
+        for(let i = 0; i < casillas_post.length; i++){
+            const element = casillas_post[i];
+            text="actulizar."+element+"='"+ datos_put[i]+"'";
+            eval(text)
+        }
+        //console.log(casillas_post.length,casillas_post); 
+        let data = JSON.stringify(actulizar)
+        const url=ruta
+        var xhr= new XMLHttpRequest();
+        xhr.open("PUT",url);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+        try{
+            xhr.send(data);
+            xhr.onload = function (){
+                if(xhr.status === 201){
+                    get(ruta)
+                }
+            }
+        }
+        catch(err){
+            alert(err.message);
+        }
+    }
+}
+
+function dell(ruta,pt_1){
+    const url_get= ruta
+    peticion_get(url_get, retorno_http)
+    function peticion_get(url, cFunction){
+        const api= new XMLHttpRequest();
+        api.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200){
+               let datos_api = JSON.parse(this.responseText);
+                for(let index = 0; index < 1; index++){
+                   let element = datos_api.items[index];
+                   cFunction(element);
+                }
+            }
+        }
+        api.open("GET",url_get);
+        api.send();
+    }
+    function retorno_http(xhttp){
+        let at= xhttp
+        let casillas_post=[]
+        Object.entries(at).map(function(casilla){
+            //console.log(casilla[0]); 
+            casillas_post.push(casilla[0])
+        })
+        let dell = new Object()
+        let datos_dell=[pt_1]
+        let ciclo= 0;
+        for(let i = 0; i < casillas_post.length; i++){
+            const element = casillas_post[i];
+            text="dell."+element+"='"+ datos_dell[i]+"'";
+            eval(text)
+            ciclo += 1;
+            if(ciclo == 1){
+                break
+            }
+        }
+        var data = JSON.stringify(dell);
+        var url = ruta
+        var req= new XMLHttpRequest();
+        req.open("DELETE",url);
+        req.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+        try{
+            req.send(data);
+            req.onload = function (){
+                if(req.status === 204){
+                    get(ruta)
+                }
+            }
+        }
+        catch(err){
+            alert(err.message);
+        }
+    }
+}
+
+
 
 function traer_info(pt_1){
 
@@ -226,5 +334,4 @@ function borrar_datos(ruta,pt_1){
 
 }
 
-//alert("MIRAR QUE FUNCINALIDADES TIENE POSTMAN")
 
